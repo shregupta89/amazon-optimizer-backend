@@ -1,0 +1,36 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model OriginalListing {
+  id          Int       @id @default(autoincrement())
+  asin        String    
+  title       String    @db.Text
+  bullets     String    @db.Text
+  description String    @db.Text
+  createdAt   DateTime  @default(now())
+  
+  optimized   OptimizedListing?
+
+  @@index([asin])
+}
+
+model OptimizedListing {
+  id            Int              @id @default(autoincrement())
+  originalId    Int              @unique
+  asin          String
+  title         String           @db.Text
+  bullets       String           @db.Text
+  description   String           @db.Text
+  keywords      String           @db.Text
+  createdAt     DateTime         @default(now())
+  
+  original      OriginalListing  @relation(fields: [originalId], references: [id], onDelete: Cascade)
+
+  @@index([asin])
+}
