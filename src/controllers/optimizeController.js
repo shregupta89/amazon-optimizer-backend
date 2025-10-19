@@ -1,5 +1,5 @@
 const { PrismaClient } = require('@prisma/client');
-const { fetchAmazonProduct } = require('../services/amazonScraper');
+const { fetchAmazonProduct } = require('../services/fetchAmazonListings');
 const { optimizeListing } = require('../services/aiService');
 
 const prisma = new PrismaClient();
