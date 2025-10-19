@@ -2,36 +2,51 @@
 
 Node.js backend for optimizing Amazon product listings using AI.
 
-## Setup
+## Quick Setup
 
-### 1. Install Dependencies
-```bash
-npm install
-```
+### Option 1: Docker (Recommended)
 
-### 2. Setup MySQL with Docker
 ```bash
+# 1. Create environment file
+cp .env.docker .env
+# Add your OPENAI_API_KEY and RAPIDAPI_KEY in .env
+
+# 2. Start everything
 docker-compose up -d
+
+# 3. Check status
+docker-compose ps
 ```
 
-### 3. Configure Environment
+Server runs on `http://localhost:5001`
+
+### Option 2: Local Setup
+
 ```bash
+# 1. Install dependencies
+npm install
+
+# 2. Start MySQL
+docker run -d \
+  --name amazon_optimizer_db \
+  -e MYSQL_ROOT_PASSWORD=rootpassword \
+  -e MYSQL_DATABASE=amazon_optimizer \
+  -e MYSQL_USER=admin \
+  -e MYSQL_PASSWORD=admin123 \
+  -p 3306:3306 \
+  mysql:8.0
+
+# 3. Configure environment
 cp .env.example .env
-```
-Edit `.env` and add your OpenAI API key and RapidAPI key.
+# Add your API keys
 
-### 4. Setup Database
-```bash
+# 4. Setup database
 npx prisma generate
 npx prisma migrate dev --name init
-```
 
-### 5. Run Server
-```bash
+# 5. Run server
 npm run dev
 ```
-
-Server runs on `http://localhost:5000`
 
 ## API Endpoints
 
@@ -63,3 +78,9 @@ The AI is prompted to optimize listings by:
 - Suggesting 3-5 relevant keywords
 
 Structured JSON output ensures consistent parsing.
+
+## Documentation
+
+- **DOCKER_SETUP.md** - Docker deployment guide
+- **SETUP.md** - Detailed local setup guide
+- **README.md** - This file
